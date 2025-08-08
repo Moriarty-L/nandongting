@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>交流互动 - 南洞庭湖生物多样性科普馆</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* 基础重置 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", "微软雅黑", sans-serif;
+        background: #fff;
+      }
+
+      /* 限定背景范围 */
+      header {
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+        background: linear-gradient(15deg, #2d6650 0%, #6b9d7a 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative; /* 保持背景层定位 */
+      }
+
+      /* 确保伪元素不影响居中 */
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(43, 102, 80, 1) 0%,
+          rgba(43, 102, 80, 0) 100%
+        );
+        z-index: -1;
+      }
+
+      header h1 {
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        letter-spacing: 1px;
+      }
+
+      /* 改进导航栏 */
+      .sub-nav {
+        gap: 80px; /* 新增2：设置导航项间距 */
+        display: flex;
+        justify-content: center;
+        margin: 2rem auto;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+      }
+
+      .sub-nav a {
+        color: #2d6650;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .sub-nav a:hover {
+        background: rgba(45, 102, 80, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .sub-nav a::after {
+        content: attr(data-desc);
+        position: absolute;
+        bottom: -1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        color: #666;
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+      }
+
+      /* 用户系统样式 */
+      .user-panel {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 1rem;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #2d6650;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      /* 聊天模块样式 */
+      .chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+
+      .chat-header {
+        background: #6b9d7a;
+        color: white;
+        padding: 1rem;
+        border-radius: 12px 12px 0 0;
+        cursor: move;
+      }
+
+      #closeChat {
+        font-size: 1.5rem;
+        padding: 0 8px;
+        transition: all 0.3s ease;
+      }
+
+      #closeChat:hover {
+        transform: scale(1.2);
+        color: #ffeb3b;
+      }
+
+      .chat-messages {
+        height: 300px;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .chat-input {
+        display: flex;
+        padding: 1rem;
+        border-top: 1px solid #eee;
+      }
+
+      .message-bubble {
+        background: #f8faf9;
+        padding: 0.8rem;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        max-width: 80%;
+      }
+
+      /* 关注按钮样式 */
+      .follow-btn {
+        background: #2d6650;
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 1rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .following {
+        background: #6b9d7a;
+      }
+
+      .sub-nav a:hover::after {
+        opacity: 1;
+      }
+
+      /* 内容区块优化 */
+      .section-block {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: 2rem;
+        }
+
+        .sub-nav {
+          flex-wrap: wrap;
+          gap: 1rem;
+          top: 10px;
+        }
+
+        .sub-nav a {
+          padding: 0.6rem 1rem;
+          font-size: 0.9rem;
+        }
+
+        .section-block {
+          margin: 2rem 1rem;
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header style="position: relative; padding: 2rem 1rem 3rem">
+      <!-- 导航链接容器 -->
+      <div
+        style="
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 2rem;
+          display: flex;
+          gap: 2rem;
+        "
+      >
+        <a
+          href="../nandongting/index.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          "
+          >🏠 首页
+        </a>
+      </div>
+
+      <!-- 标题部分 -->
+      <h1 style="text-align: center; color: white; margin-bottom: 0.5rem">
+        互动交流
+      </h1>
+      <p style="text-align: center; font-size: 1.2rem; opacity: 0.9">
+        文明发言，共享美好
+      </p>
+    </header>
+
+    <nav class="sub-nav">
+      <a href="#message-board" data-desc="分享您的观鸟故事">留言板</a>
+      <a href="#qna-section" data-desc="专家在线解答">知识问答</a>
+      <a href="#activity-feed" data-desc="最新活动资讯">活动分享</a>
+    </nav>
+
+    <!-- 用户面板 -->
+    <div class="user-panel">
+      <div id="authBox">
+        <button class="form-button" onclick="showLogin()">登录/注册</button>
+      </div>
+      <div id="userInfo" style="display: none">
+        <div class="user-avatar" onclick="showProfile()">👤</div>
+      </div>
+    </div>
+
+    <!-- 实时聊天模块 -->
+    <div class="chat-container" id="chatBox" style="display: none">
+      <div class="chat-header">
+        <h4>在线交流室</h4>
+        <span id="onlineCount">在线：0人</span>
+        <button
+          id="closeChat"
+          style="
+            margin-left: 15px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+          "
+        >
+          ×
+        </button>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input
+          type="text"
+          id="chatInput"
+          placeholder="输入消息..."
+          class="form-input"
+          style="flex: 1"
+        />
+        <button onclick="sendMessage()" class="form-button">发送</button>
+      </div>
+    </div>
+
+    <!-- 留言板板块 -->
+    <section class="section-block" id="message-board">
+      <h2
+        style="
+          color: #2d6650;
+          margin-bottom: 1.5rem;
+          border-left: 4px solid #6b9d7a;
+          padding-left: 1rem;
+        "
+      >
+        访客留言板
+      </h2>
+
+      <!-- 留言表单 -->
+      <form id="messageForm" class="interactive-form">
+        <div class="form-group">
+          <input
+            type="text"
+            id="userName"
+            placeholder="您的称呼（可选）"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <textarea
+            id="messageContent"
+            placeholder="写下您的观鸟故事或建议..."
+            required
+            class="form-input"
+          ></textarea>
+        </div>
+        <button type="submit" class="form-button">发布留言</button>
+      </form>
+
+      <!-- 留言展示 -->
+      <div id="messagesContainer" class="content-container">
+        <!-- 示例留言 -->
+        <div class="message-card">
+          <div class="message-header">
+            <span class="author">观鸟爱好者</span>
+            <span class="time">2024-03-15 10:30</span>
+            <span class="author"
+              >观鸟爱好者
+              <button class="follow-btn" onclick="toggleFollow('观鸟爱好者')">
+                关注
+              </button>
+            </span>
+            <button class="delete-btn">删除</button>
+          </div>
+          <p class="message-content">
+            今天观察到三只白琵鹭！建议在科普馆增加迁徙路线展示。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 知识问答板块 -->
+    <section class="section-block" id="qna-section">
+      <h2
+        style="
+          color: #2d6650;
+          margin-bottom: 1.5rem;
+          border-left: 4px solid #6b9d7a;
+          padding-left: 1rem;
+        "
+      >
+        鸟类知识问答
+      </h2>
+
+      <!-- 提问表单 -->
+      <form id="questionForm" class="interactive-form">
+        <div class="form-group">
+          <textarea
+            id="questionText"
+            placeholder="请输入您关于鸟类的问题..."
+            required
+            class="form-input"
+          ></textarea>
+        </div>
+        <button type="submit" class="form-button">提交问题</button>
+      </form>
+
+      <!-- 问题列表 -->
+      <div id="questionsContainer" class="content-container">
+        <!-- 示例问答 -->
+        <div class="qna-card">
+          <div class="question">
+            <div class="q-header">
+              <span class="q-author">游客_张先生</span>
+              <span class="q-time">2024-03-14 15:22</span>
+            </div>
+            <p class="q-content">如何区分苍鹭和草鹭？</p>
+          </div>
+          <div class="answer">
+            <div class="a-header">
+              <span class="a-author">专家王老师</span>
+              <span class="a-time">2024-03-14 16:45</span>
+            </div>
+            <p class="a-content">
+              主要看颈部颜色：苍鹭颈部灰白色，草鹭颈部有红褐色纵纹...
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 活动分享板块 -->
+    <section class="section-block" id="activity-feed">
+      <h2
+        style="
+          color: #2d6650;
+          margin-bottom: 1.5rem;
+          border-left: 4px solid #6b9d7a;
+          padding-left: 1rem;
+        "
+      >
+        观鸟活动
+      </h2>
+
+      <!-- 活动发布 -->
+      <form id="activityForm" class="interactive-form">
+        <div class="form-row">
+          <input
+            type="text"
+            id="activityTitle"
+            placeholder="活动主题"
+            required
+            class="form-input"
+          />
+          <input type="date" id="activityDate" class="form-input" />
+        </div>
+        <div class="form-group">
+          <textarea
+            id="activityDesc"
+            placeholder="活动详情描述..."
+            required
+            class="form-input"
+          ></textarea>
+        </div>
+        <button type="submit" class="form-button">发布活动</button>
+      </form>
+
+      <!-- 活动展示 -->
+      <div id="activitiesContainer" class="content-container">
+        <!-- 示例活动 -->
+        <div class="activity-card">
+          <div class="activity-header">
+            <h3 class="activity-title">春季候鸟观测活动</h3>
+            <span class="activity-date">2024-04-05</span>
+          </div>
+          <p class="activity-desc">
+            诚邀各位参与本周日的白鹤观测活动，集合地点：科普馆东门...
+          </p>
+          <div class="activity-meta">
+            <span class="participants">已报名23人</span>
+            <button class="join-button">立即参与</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      /* 通用表单样式 */
+      .interactive-form {
+        background: #f8faf9;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid #e0e6e3;
+        border-radius: 6px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        border-color: #6b9d7a;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(107, 157, 122, 0.2);
+      }
+
+      .form-button {
+        background: #2d6650;
+        color: white;
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .form-button:hover {
+        background: #1f4a38;
+        transform: translateY(-1px);
+      }
+
+      /* 内容卡片通用样式 */
+      .content-container {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .message-card,
+      .qna-card,
+      .activity-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      /* 留言板特定样式 */
+      .message-header {
+        display: flex;
+        justify-content: space-between;
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        position: relative;
+        padding-right: 80px;
+      }
+
+      .message-content {
+        color: #444;
+        line-height: 1.6;
+      }
+
+      /* 删除按钮样式 */
+      .delete-btn {
+        background: #ff4d4d;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border: none;
+        border-radius: 1rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        margin-left: 1rem;
+      }
+
+      .delete-btn:hover {
+        background: #ff1a1a;
+        transform: scale(1.05);
+      }
+
+      .message-card .delete-btn {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      /* 已参与状态样式 */
+      .joined {
+        background: #6b9d7a !important;
+      }
+
+      /* 问答区特定样式 */
+      .qna-card {
+        border: 2px solid #e8f1ee;
+      }
+
+      .answer {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f8faf9;
+        border-radius: 6px;
+      }
+
+      .a-header {
+        color: #6b9d7a;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* 活动分享特定样式 */
+      .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .activity-title {
+        color: #2d6650;
+        font-size: 1.1rem;
+      }
+
+      .activity-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+
+      .join-button {
+        background: #6b9d7a;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 1rem;
+        cursor: pointer;
+      }
+
+      @media (max-width: 768px) {
+        .form-row {
+          flex-direction: column;
+        }
+
+        .activity-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+
+    <script>
+      // 留言板功能
+      const messageForm = document.getElementById("messageForm");
+      // 修改后的留言提交功能
+      messageForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const userName =
+          document.getElementById("userName").value || "匿名用户";
+        const content = document.getElementById("messageContent").value;
+
+        // 生成包含删除按钮的留言HTML
+        const messageHTML = `
+                <div class="message-card">
+                    <div class="message-header">
+                        <span class="author">${userName}</span>
+                        <span class="time">${new Date().toLocaleString()}</span>
+                        <button class="delete-btn">删除</button>
+                    </div>
+                    <p class="message-content">${content}</p>
+                </div>
+            `;
+
+        messagesContainer.insertAdjacentHTML("afterbegin", messageHTML);
+        messageForm.reset();
+      });
+
+      // 修改后的问答功能
+      const questionForm = document.getElementById("questionForm");
+      questionForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const question = document.getElementById("questionText").value;
+
+        const questionHTML = `
+            <div class="qna-card">
+                <div class="question">
+                    <div class="q-header">
+                        <span class="q-author">游客提问</span>
+                        <span class="q-time">${new Date().toLocaleString()}</span>
+                        <button class="delete-btn">删除</button>
+                    </div>
+                    <p class="q-content">${question}</p>
+                </div>
+            </div>
+        `;
+
+        questionsContainer.insertAdjacentHTML("afterbegin", questionHTML);
+        questionForm.reset();
+      });
+
+      // 修改后的活动发布功能
+      const activityForm = document.getElementById("activityForm");
+      activityForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const title = document.getElementById("activityTitle").value;
+        const date = document.getElementById("activityDate").value;
+        const desc = document.getElementById("activityDesc").value;
+
+        const activityHTML = `
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h3 class="activity-title">${title}</h3>
+                    <span class="activity-date">${date}</span>
+                </div>
+                <p class="activity-desc">${desc}</p>
+                <div class="activity-meta">
+                    <span class="participants">已报名0人</span>
+                    <button class="join-button">立即参与</button>
+                </div>
+                <button class="delete-btn">删除活动</button>
+            </div>
+        `;
+
+        activitiesContainer.insertAdjacentHTML("afterbegin", activityHTML);
+        activityForm.reset();
+      });
+
+      // 增强的点击事件处理
+      document.addEventListener("click", function (e) {
+        // 参与/取消参与功能
+        if (e.target.classList.contains("join-button")) {
+          const btn = e.target;
+          const participants = btn.previousElementSibling;
+          let count = parseInt(participants.textContent.match(/\d+/)[0]);
+
+          if (btn.textContent === "立即参与") {
+            count++;
+            btn.textContent = "已参与";
+            btn.classList.add("joined");
+          } else {
+            count--;
+            btn.textContent = "立即参与";
+            btn.classList.remove("joined");
+          }
+          participants.textContent = `已报名${count}人`;
+        }
+
+        // 统一删除处理
+        if (e.target.classList.contains("delete-btn")) {
+          if (confirm("确定要删除吗？")) {
+            const card = e.target.closest(
+              ".message-card, .qna-card, .activity-card"
+            );
+            if (card) {
+              // 添加删除动画
+              card.style.transform = "scale(0.9)";
+              card.style.opacity = "0";
+              setTimeout(() => card.remove(), 300);
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+      // 用户系统功能
+      let currentUser = null;
+      const users = JSON.parse(localStorage.getItem("users")) || {};
+
+      function showLogin() {
+        const username = prompt("请输入用户名：");
+        if (username) {
+          currentUser = {
+            id: Date.now(),
+            name: username,
+            following: [],
+            followers: [],
+          };
+          users[username] = currentUser;
+          localStorage.setItem("users", JSON.stringify(users));
+          document.getElementById("userInfo").style.display = "block";
+          document.getElementById("authBox").style.display = "none";
+          document.getElementById("chatBox").style.display = "block";
+        }
+      }
+
+      function toggleFollow(userId) {
+        const btn = event.target;
+        if (currentUser.following.includes(userId)) {
+          currentUser.following = currentUser.following.filter(
+            (id) => id !== userId
+          );
+          btn.classList.remove("following");
+          btn.textContent = "关注";
+        } else {
+          currentUser.following.push(userId);
+          btn.classList.add("following");
+          btn.textContent = "已关注";
+        }
+        localStorage.setItem("users", JSON.stringify(users));
+      }
+
+      // 实时聊天功能
+      const chatSocket = new WebSocket("wss://echo.websocket.org"); // 示例地址
+
+      function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const message = {
+          type: "message",
+          user: currentUser.name,
+          content: input.value,
+          timestamp: new Date().toISOString(),
+        };
+        chatSocket.send(JSON.stringify(message));
+        input.value = "";
+      }
+
+      chatSocket.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        const bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+        bubble.innerHTML = `
+            <strong>${msg.user}</strong>
+            <p>${msg.content}</p>
+            <small>${new Date(msg.timestamp).toLocaleTimeString()}</small>
+        `;
+        document.getElementById("chatMessages").appendChild(bubble);
+      };
+
+      // 修改留言提交功能
+      messageForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const content = {
+          user: currentUser.name,
+          text: messageContent.value,
+          likes: 0,
+          comments: [],
+          timestamp: new Date(),
+        };
+        // 保存并显示留言...
+      });
+
+      // 新增点赞功能
+      function toggleLike(postId) {
+        const post = posts.find((p) => p.id === postId);
+        post.likes += post.liked ? -1 : 1;
+        post.liked = !post.liked;
+        updatePostDisplay(post);
+      }
+
+      // 添加关闭功能
+      document
+        .getElementById("closeChat")
+        .addEventListener("click", function () {
+          document.getElementById("chatBox").style.display = "none";
+        });
+
+      // 可选：添加重新打开按钮（在用户面板附近）
+      const chatToggle = document.createElement("button");
+      chatToggle.textContent = "打开聊天室";
+      chatToggle.style.position = "fixed";
+      chatToggle.style.bottom = "20px";
+      chatToggle.style.right = "20px";
+      chatToggle.className = "form-button";
+      chatToggle.onclick = () =>
+        (document.getElementById("chatBox").style.display = "block");
+      document.body.appendChild(chatToggle);
+    </script>
+
+    <script>
+      // 增强平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          const offset = 80; // 导航栏高度补偿
+
+          window.scrollTo({
+            top: target.offsetTop - offset,
+            behavior: "smooth",
+          });
+        });
+      });
+      // 动态导航栏背景
+      window.addEventListener("scroll", () => {
+        const nav = document.querySelector(".sub-nav");
+        if (window.scrollY > 100) {
+          nav.style.background = "rgba(255,255,255,0.98)";
+          nav.style.boxShadow = "0 4px 16px rgba(0,0,0,0.12)";
+        } else {
+          nav.style.background = "rgba(255,255,255,0.95)";
+          nav.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+        }
+      });
+    </script>
+  </body>
+</html>

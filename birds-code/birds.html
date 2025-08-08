@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>鸟类资源 - 南洞庭湖生物多样性科普馆</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* 基础样式 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", "微软雅黑", sans-serif;
+        background: #f8faf9;
+        line-height: 1.6;
+      }
+
+      /* 头部样式 */
+      header {
+        text-align: center;
+        padding: 4rem 1rem 5rem;
+        background: linear-gradient(15deg, #2d6650 0%, #6b9d7a 100%);
+        color: white;
+        position: relative;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(43, 102, 80, 1) 0%,
+          rgba(43, 102, 80, 0) 100%
+        );
+        z-index: -1;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 导航样式 */
+      .sub-nav {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.98);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .sub-nav a {
+        color: #2d6650;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .sub-nav a:hover {
+        background: rgba(44, 94, 60, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* 内容区块 */
+      .section-block {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      h2 {
+        color: #2d6650;
+        margin-bottom: 2rem;
+        border-left: 4px solid #6b9d7a;
+        padding-left: 1.5rem;
+      }
+
+      /* 分类系统 */
+      .taxonomy-accordion {
+        border: 1px solid #e0e6e3;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .taxonomy-header {
+        padding: 1.5rem;
+        background: #f5f9f7;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .taxonomy-header:hover {
+        background: #e3efe9;
+      }
+
+      .taxonomy-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .species-list {
+        padding: 1.5rem 2.5rem;
+        list-style: square;
+        color: #446652;
+      }
+
+      .species-list li {
+        margin-bottom: 0.8rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e0e6e3;
+      }
+
+      /* 鸟类图鉴 */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5rem;
+        margin-top: 2rem;
+      }
+
+      .bird-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s;
+      }
+
+      .bird-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .bird-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        border-bottom: 3px solid #6b9d7a;
+      }
+
+      .bird-info {
+        padding: 1.5rem;
+        background: #fdfdfd;
+      }
+
+      .bird-info h3 {
+        color: #2d6650;
+        margin-bottom: 0.5rem;
+      }
+
+      .latin {
+        color: #7a8d84;
+        font-style: italic;
+        font-size: 0.9em;
+      }
+      /* 新增筛选控件样式 */
+      .filter-toolbar {
+        margin-bottom: 2rem;
+        padding: 1rem 0;
+        border-bottom: 2px solid #e0e6e3;
+      }
+
+      .filter-group {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-select {
+        padding: 0.8rem 1.2rem;
+        border: 1px solid #6b9d7a;
+        border-radius: 2rem;
+        background: white;
+        color: #2d6650;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .filter-select:hover {
+        background: rgba(107, 157, 122, 0.1);
+        box-shadow: 0 2px 8px rgba(107, 157, 122, 0.15);
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .filter-group {
+          gap: 1rem;
+        }
+
+        .filter-select {
+          width: 100%;
+          padding: 0.8rem;
+        }
+      }
+      /* 视频模块 */
+      .video-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 2rem;
+        position: relative;
+      }
+
+      .bird-video {
+        width: 100%;
+        height: 560px;
+        object-fit: cover;
+      }
+
+      .video-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        padding: 2rem;
+        color: white;
+      }
+
+      /* 分布地图 */
+      .map-container {
+        position: relative;
+        margin-top: 2rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f5f9f7;
+      }
+
+      .base-map {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .marker {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: #2d6650;
+        border-radius: 50%;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+        transition: transform 0.3s;
+      }
+
+      .marker:hover {
+        transform: translate(-50%, -50%) scale(1.3);
+        z-index: 10;
+      }
+
+      .marker-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        white-space: nowrap;
+        display: none;
+      }
+
+      .marker:hover .marker-tooltip {
+        display: block;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        header {
+          padding: 3rem 1rem 4rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .sub-nav {
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding: 1rem;
+        }
+
+        .section-block {
+          margin: 2rem 1rem;
+          padding: 1.5rem;
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .bird-video {
+          height: 300px;
+        }
+
+        .video-info {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header style="position: relative; padding: 2rem 1rem 3rem">
+      <!-- 导航链接容器 -->
+      <div
+        style="
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 2rem;
+          display: flex;
+          gap: 2rem;
+        "
+      >
+        <a
+          href="../nandongting/index.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          "
+          >🏠 首页
+        </a>
+      </div>
+      <h1>鸟类资源</h1>
+      <p>南洞庭湖湿地生态多样性展示</p>
+    </header>
+
+    <nav class="sub-nav">
+      <a href="#classification">分类体系</a>
+      <a href="#gallery">鸟类图鉴</a>
+      <a href="#video">视频介绍</a>
+      <a href="#distribution">分布地图</a>
+    </nav>
+
+    <index>
+      <!-- 分类区块 -->
+      <section id="classification" class="section-block">
+        <h2>鸟类分类系统</h2>
+        <div class="taxonomy-accordion">
+          <div class="taxonomy-item">
+            <div class="taxonomy-header">
+              <span>雁形目 Anseriformes</span>
+              <span>▶</span>
+            </div>
+            <div class="taxonomy-content">
+              <ul class="species-list">
+                <li>鸿雁 Cygnopsis cygnoid</li>
+                <li>豆雁 Anser fabalis</li>
+                <li>白额雁 Anser albifrons</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 其他目分类... -->
+        </div>
+      </section>
+
+      <!-- 图鉴区块 -->
+
+      <!-- 新增筛选工具栏 -->
+      <div class="section-block">
+        <h2>鸟类图鉴</h2>
+        <div class="filter-group">
+          <select class="filter-select" id="taxonomyFilter">
+            <option value="">所有分类</option>
+            <option value="Anseriformes">雁形目</option>
+            <option value="Pelecaniformes">鹈形目</option>
+            <option value="Gruiformes">鹤形目</option>
+          </select>
+
+          <select class="filter-select" id="habitatFilter">
+            <option value="">所有栖息地</option>
+            <option value="wetland">湿地</option>
+            <option value="forest">林地</option>
+            <option value="grassland">草地</option>
+          </select>
+
+          <select class="filter-select" id="protectionFilter">
+            <option value="">所有保护级别</option>
+            <option value="1">国家一级</option>
+            <option value="2">国家二级</option>
+            <option value="3">省级保护</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 视频区块 -->
+      <section id="video" class="section-block">
+        <h2>生态纪录片</h2>
+        <div class="video-container">
+          <video class="bird-video" controls poster="videos/poster.jpg">
+            <source src="videos/egret.mp4" type="video/mp4" />
+          </video>
+          <div class="video-info">
+            <h3>白鹭的湿地生活</h3>
+            <p>记录白鹭的捕食、筑巢等自然行为</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 分布地图区块 -->
+      <section id="distribution" class="section-block">
+        <h2>实时分布地图</h2>
+        <div class="map-container">
+          <img src="images/wetland-map.jpg" class="base-map" alt="湿地地图" />
+          <div class="marker" style="left: 35%; top: 48%">
+            <div class="marker-tooltip">白鹤越冬区</div>
+          </div>
+          <!-- 更多标记点... -->
+        </div>
+      </section>
+    </index>
+
+    <script>
+      // 手风琴交互
+      document.querySelectorAll(".taxonomy-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling;
+          content.style.maxHeight = content.style.maxHeight
+            ? null
+            : content.scrollHeight + "px";
+          header.querySelector("span:last-child").textContent = content.style
+            .maxHeight
+            ? "▼"
+            : "▶";
+        });
+      });
+
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: "smooth",
+          });
+        });
+      });
+
+      // 动态导航栏
+      window.addEventListener("scroll", () => {
+        const nav = document.querySelector(".sub-nav");
+        nav.style.background =
+          window.scrollY > 100
+            ? "rgba(255,255,255,0.98)"
+            : "rgba(255,255,255,0.95)";
+      });
+    </script>
+    <script>
+      // 推荐的标准写法（修正格式问题），java的前端筛选脚本
+      document.addEventListener("DOMContentLoaded", () => {
+        const filters = {
+          order: "",
+          habitat: "",
+          protection: "",
+        };
+
+        document.querySelectorAll(".filter-select").forEach((select) => {
+          select.addEventListener("change", (e) => {
+            const type = e.target.id.replace("Filter", "");
+            filters[type] = e.target.value;
+            applyFilters();
+          });
+        });
+
+        function applyFilters() {
+          document.querySelectorAll(".bird-card").forEach((card) => {
+            const matchOrder =
+              !filters.order || card.dataset.order === filters.order;
+            const matchHabitat =
+              !filters.habitat || card.dataset.habitat === filters.habitat;
+            const matchProtection =
+              !filters.protection ||
+              card.dataset.protection === filters.protection;
+
+            card.style.display =
+              matchOrder && matchHabitat && matchProtection ? "block" : "none";
+          });
+        }
+
+        document.querySelectorAll(".taxonomy-header").forEach((header) => {
+          header.addEventListener("click", () => {
+            const orderName = header.textContent.split(" ")[0];
+            document.getElementById("taxonomyFilter").value = orderName;
+            filters.order = orderName;
+            applyFilters();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

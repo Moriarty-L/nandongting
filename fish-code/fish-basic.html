@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>南洞庭湖鱼类图文库检索</title>
+    <style>
+      :root {
+        --primary: #2c5e3c;
+        --secondary: #8ab17d;
+        --red: #ff4e4e;
+        --white: #fff;
+        --text-dark: #333;
+        --text-light: #666;
+        --bg-light: #f8f9fa;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
+
+      /* 头部样式 */
+      header {
+        text-align: center;
+        padding: 2.5rem 1rem 3rem;
+        background: linear-gradient(15deg, #2d6650 0%, #6b9d7a 100%);
+        color: white;
+        position: relative;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(43, 102, 80, 1) 0%,
+          rgba(43, 102, 80, 0) 100%
+        );
+        z-index: -1;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 首页按钮样式 */
+      .home-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 2rem;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 2rem;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .home-button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-50%) scale(1.05);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+      }
+
+      .nav-links a {
+        color: var(--text-dark);
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-links a.active {
+        color: var(--primary);
+        font-weight: 500;
+      }
+
+      /* 搜索区域 */
+      .search-section {
+        padding: 60px 0 40px;
+        text-align: center;
+      }
+
+      .search-title {
+        font-size: 28px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: var(--primary);
+      }
+
+      .search-subtitle {
+        font-size: 16px;
+        color: var(--text-light);
+        margin-bottom: 30px;
+      }
+
+      .search-box {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 15px 25px;
+        border: none;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .search-button {
+        background-color: var(--red);
+        color: white;
+        border: none;
+        padding: 0 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .search-button:hover {
+        background-color: #e63e3e;
+      }
+
+      .search-tip {
+        margin-top: 15px;
+        font-size: 14px;
+        color: var(--text-light);
+      }
+
+      /* 图片展示区 */
+      .gallery-section {
+        padding: 40px 0 60px;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .gallery-item {
+        background-color: var(--white);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+      }
+
+      .gallery-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .gallery-info {
+        padding: 15px;
+      }
+
+      .gallery-title {
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+      }
+
+      .gallery-desc {
+        font-size: 14px;
+        color: var(--text-light);
+      }
+
+      /* 底部 */
+      footer {
+        background-color: var(--primary);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 30px 0;
+        text-align: center;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 15px;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-links a:hover {
+        color: var(--white);
+      }
+
+      .copyright {
+        font-size: 14px;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        header {
+          padding: 3rem 1rem 4rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .home-button {
+          position: relative;
+          top: auto;
+          transform: none;
+          right: auto;
+          margin-top: 1.5rem;
+          display: inline-block;
+        }
+
+        .nav-content {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .search-title {
+          font-size: 24px;
+        }
+
+        .search-box {
+          flex-direction: column;
+          border-radius: 15px;
+        }
+
+        .search-button {
+          padding: 15px;
+        }
+
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+      }
+      /* 新增轮播样式 - 保持与现有设计一致 */
+      .triple-independent-carousel {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+      }
+
+      /* 单个独立轮播样式 */
+      .independent-carousel {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .independent-slide-container {
+        position: relative;
+        height: 400px;
+      }
+
+      .independent-slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+
+      .independent-slide.active {
+        opacity: 1;
+      }
+
+      .independent-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .independent-slide:hover img {
+        transform: scale(1.05);
+      }
+
+      .independent-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 1.2rem;
+      }
+
+      .independent-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.7);
+        color: var(--primary);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .independent-button:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .independent-button.prev {
+        left: 15px;
+      }
+
+      .independent-button.next {
+        right: 15px;
+      }
+
+      .independent-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .independent-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .independent-indicator.active {
+        background: white;
+        transform: scale(1.2);
+      }
+
+      @media (max-width: 768px) {
+        .triple-independent-carousel {
+          flex-direction: column;
+        }
+        .independent-carousel {
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 新增头部 -->
+    <header>
+      <a href="../nandongting/index.html" class="home-button">🏠 首页</a>
+      <h1>南洞庭湖鱼类资源</h1>
+      <p>探索湿地生态系统的丰富水生生物多样性</p>
+    </header>
+
+    <!-- 搜索区域 -->
+    <section class="search-section">
+      <div class="container">
+        <h1 class="search-title">鱼类之美 劲跃争流</h1>
+        <p class="search-subtitle">探索南洞庭湖丰富的水生资源</p>
+        <div class="search-box">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="搜索各种各样鱼类的生态景观..."
+          />
+          <button class="search-button">搜索</button>
+        </div>
+        <p class="search-tip">可以尝试搜索关键词，如"龙虾"、"草龟"或"刀鱼"</p>
+      </div>
+    </section>
+
+    <!-- 轮播展示区 -->
+    <section class="triple-independent-carousel">
+      <!-- 第一个独立轮播 -->
+      <div class="independent-carousel" id="carouselA">
+        <div class="independent-slide-container">
+          <div class="independent-slide active">
+            <img src="../nandongting/fish-picture/鱼类/刀鱼.jpg" alt="刀鱼" />
+            <div class="independent-caption">刀鱼 - 长江三鲜之一</div>
+          </div>
+          <div class="independent-slide">
+            <img src="../nandongting/fish-picture/鱼类/草龟.jpg" alt="草龟" />
+            <div class="independent-caption">草龟 - 常见淡水龟类</div>
+          </div>
+          <button
+            class="independent-button prev"
+            onclick="changeIndependentSlide(-1, 'carouselA')"
+          >
+            ❮
+          </button>
+          <button
+            class="independent-button next"
+            onclick="changeIndependentSlide(1, 'carouselA')"
+          >
+            ❯
+          </button>
+          <div class="independent-indicators" id="indicatorsA"></div>
+        </div>
+      </div>
+
+      <!-- 第二个独立轮播 -->
+      <div class="independent-carousel" id="carouselB">
+        <div class="independent-slide-container">
+          <div class="independent-slide active">
+            <img
+              src="../nandongting/fish-picture/鱼类/大头鲢/大头鲢1.jpg"
+              alt="大头鲢"
+            />
+            <div class="independent-caption">大头鲢 - 滤食性鱼类</div>
+          </div>
+          <div class="independent-slide">
+            <img
+              src="../nandongting/fish-picture/鱼类/大鲵/大鲵.jpg"
+              alt="大鲵"
+            />
+            <div class="independent-caption">大鲵 - 国家二级保护动物</div>
+          </div>
+          <button
+            class="independent-button prev"
+            onclick="changeIndependentSlide(-1, 'carouselB')"
+          >
+            ❮
+          </button>
+          <button
+            class="independent-button next"
+            onclick="changeIndependentSlide(1, 'carouselB')"
+          >
+            ❯
+          </button>
+          <div class="independent-indicators" id="indicatorsB"></div>
+        </div>
+      </div>
+
+      <!-- 第三个独立轮播 -->
+      <div class="independent-carousel" id="carouselC">
+        <div class="independent-slide-container">
+          <div class="independent-slide active">
+            <img
+              src="../nandongting/fish-picture/鱼类/小龙虾.jpg"
+              alt="小龙虾"
+            />
+            <div class="independent-caption">小龙虾 - 外来经济物种</div>
+          </div>
+          <div class="independent-slide">
+            <img
+              src="../nandongting/fish-picture/鱼类/尖嘴鳄/尖嘴鳄1.jpg"
+              alt="尖嘴鳄"
+            />
+            <div class="independent-caption">尖嘴鳄 - 凶猛掠食鱼类</div>
+          </div>
+          <button
+            class="independent-button prev"
+            onclick="changeIndependentSlide(-1, 'carouselC')"
+          >
+            ❮
+          </button>
+          <button
+            class="independent-button next"
+            onclick="changeIndependentSlide(1, 'carouselC')"
+          >
+            ❯
+          </button>
+          <div class="independent-indicators" id="indicatorsC"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 鱼类图鉴 -->
+    <section class="gallery-section">
+      <div class="container">
+        <h2
+          class="search-title"
+          style="text-align: center; margin-bottom: 2rem"
+        >
+          常见鱼类图鉴
+        </h2>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <img
+              class="gallery-img"
+              src="../nandongting/fish-picture/鱼类/刀鱼.jpg"
+              alt="刀鱼"
+            />
+            <div class="gallery-info">
+              <h3 class="gallery-title">刀鱼</h3>
+              <p class="gallery-desc">长江三鲜之一，体型修长如刀，肉质鲜美</p>
+            </div>
+          </div>
+
+          <div class="gallery-item">
+            <img
+              class="gallery-img"
+              src="../nandongting/fish-picture/鱼类/大头鲢/大头鲢2.jpg"
+              alt="大头鲢"
+            />
+            <div class="gallery-info">
+              <h3 class="gallery-title">大头鲢</h3>
+              <p class="gallery-desc">滤食性鱼类，头部较大，是重要的经济鱼类</p>
+            </div>
+          </div>
+
+          <div class="gallery-item">
+            <img
+              class="gallery-img"
+              src="../nandongting/fish-picture/鱼类/小龙虾.jpg"
+              alt="小龙虾"
+            />
+            <div class="gallery-info">
+              <h3 class="gallery-title">小龙虾</h3>
+              <p class="gallery-desc">外来经济物种，适应性强，繁殖速度快</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer>
+      <div class="container">
+        <div class="footer-links">
+          <a href="#">版权声明</a>
+        </div>
+        <p class="copyright">© 2025 南洞庭湖生物多样性科普馆 版权所有</p>
+      </div>
+    </footer>
+
+    <script>
+      // 搜索功能
+      document
+        .querySelector(".search-button")
+        .addEventListener("click", function () {
+          const query = document.querySelector(".search-input").value.trim();
+          if (query) {
+            alert(`正在搜索: ${query}`);
+            // 实际应用中这里应该是AJAX请求或页面跳转
+          }
+        });
+
+      // 回车搜索
+      document
+        .querySelector(".search-input")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            document.querySelector(".search-button").click();
+          }
+        });
+
+      const independentSlides = { carouselA: 0, carouselB: 0, carouselC: 0 };
+
+      // 初始化独立轮播
+      function initIndependentCarousels() {
+        ["carouselA", "carouselB", "carouselC"].forEach((id) => {
+          const slides = document.querySelectorAll(`#${id} .independent-slide`);
+          const indicators = document.getElementById(
+            `indicators${id.slice(-1)}`
+          );
+
+          // 创建指示器
+          slides.forEach((_, index) => {
+            const indicator = document.createElement("div");
+            indicator.className = "independent-indicator";
+            if (index === 0) indicator.classList.add("active");
+            indicator.onclick = () => goToIndependentSlide(index, id);
+            indicators.appendChild(indicator);
+          });
+
+          showIndependentSlide(0, id);
+        });
+      }
+
+      // 显示指定幻灯片
+      function showIndependentSlide(index, carouselId) {
+        const slides = document.querySelectorAll(
+          `#${carouselId} .independent-slide`
+        );
+        const indicators = document.querySelectorAll(
+          `#indicators${carouselId.slice(-1)} .independent-indicator`
+        );
+
+        slides.forEach((slide) => slide.classList.remove("active"));
+        indicators.forEach((ind) => ind.classList.remove("active"));
+
+        independentSlides[carouselId] = index;
+        slides[index].classList.add("active");
+        indicators[index].classList.add("active");
+      }
+
+      // 切换幻灯片
+      function changeIndependentSlide(delta, carouselId) {
+        const slides = document.querySelectorAll(
+          `#${carouselId} .independent-slide`
+        );
+        let newIndex =
+          (independentSlides[carouselId] + delta + slides.length) %
+          slides.length;
+        showIndependentSlide(newIndex, carouselId);
+      }
+
+      // 跳转到指定幻灯片
+      function goToIndependentSlide(index, carouselId) {
+        showIndependentSlide(index, carouselId);
+      }
+
+      // 自动轮播
+      function autoIndependentSlide() {
+        setInterval(() => {
+          Object.keys(independentSlides).forEach((id) => {
+            const slides = document.querySelectorAll(
+              `#${id} .independent-slide`
+            );
+            const newIndex = (independentSlides[id] + 1) % slides.length;
+            showIndependentSlide(newIndex, id);
+          });
+        }, 5000);
+      }
+
+      // 初始化
+      window.addEventListener("DOMContentLoaded", () => {
+        initIndependentCarousels();
+        autoIndependentSlide();
+      });
+    </script>
+  </body>
+</html>

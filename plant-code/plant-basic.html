@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>植物资源 - 南洞庭湖生物多样性科普馆</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* 基础样式 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", "微软雅黑", sans-serif;
+        background: #f8faf9;
+        line-height: 1.6;
+      }
+
+      /* 头部样式 */
+      header {
+        text-align: center;
+        padding: 4rem 1rem 5rem;
+        background: linear-gradient(15deg, #2d6650 0%, #6b9d7a 100%);
+        color: white;
+        position: relative;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(43, 102, 80, 1) 0%,
+          rgba(43, 102, 80, 0) 100%
+        );
+        z-index: -1;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 导航样式 */
+      .sub-nav {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.98);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .sub-nav a {
+        color: #2d6650;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .sub-nav a:hover {
+        background: rgba(44, 94, 60, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* 搜索区域 */
+      .search-section {
+        padding: 60px 0 40px;
+        text-align: center;
+      }
+
+      .search-title {
+        font-size: 28px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #2c5e3c;
+      }
+
+      .search-subtitle {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .search-box {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 15px 25px;
+        border: none;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .search-button {
+        background-color: #ff4e4e;
+        color: white;
+        border: none;
+        padding: 0 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .search-button:hover {
+        background-color: #e63e3e;
+      }
+
+      .search-tip {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* 内容区块 */
+      .section-block {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      h2 {
+        color: #2d6650;
+        margin-bottom: 2rem;
+        border-left: 4px solid #6b9d7a;
+        padding-left: 1.5rem;
+      }
+
+      /* 分类系统 */
+      .taxonomy-accordion {
+        border: 1px solid #e0e6e3;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .taxonomy-header {
+        padding: 1.5rem;
+        background: #f5f9f7;
+        cursor: pointer;
+        transition: background 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .taxonomy-header:hover {
+        background: #e3efe9;
+      }
+
+      .taxonomy-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .species-list {
+        padding: 1.5rem 2.5rem;
+        list-style: square;
+        color: #446652;
+      }
+
+      .species-list li {
+        margin-bottom: 0.8rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e0e6e3;
+      }
+
+      /* 植物图鉴 */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5rem;
+        margin-top: 2rem;
+      }
+
+      .plant-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s;
+      }
+
+      .plant-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .plant-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: contain;
+        border-bottom: 3px solid #6b9d7a;
+        background-color: #f8faf9;
+      }
+
+      .plant-info {
+        padding: 1.5rem;
+        background: #fdfdfd;
+      }
+
+      .plant-info h3 {
+        color: #2d6650;
+        margin-bottom: 0.5rem;
+      }
+
+      .latin {
+        color: #7a8d84;
+        font-style: italic;
+        font-size: 0.9em;
+      }
+
+      /* 筛选控件样式 */
+      .filter-toolbar {
+        margin-bottom: 2rem;
+        padding: 1rem 0;
+        border-bottom: 2px solid #e0e6e3;
+      }
+
+      .filter-group {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-select {
+        padding: 0.8rem 1.2rem;
+        border: 1px solid #6b9d7a;
+        border-radius: 2rem;
+        background: white;
+        color: #2d6650;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .filter-select:hover {
+        background: rgba(107, 157, 122, 0.1);
+        box-shadow: 0 2px 8px rgba(107, 157, 122, 0.15);
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .filter-group {
+          gap: 1rem;
+        }
+
+        .filter-select {
+          width: 100%;
+          padding: 0.8rem;
+        }
+      }
+
+      /* 轮播样式 */
+      .triple-independent-carousel {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+      }
+
+      /* 单个独立轮播样式 */
+      .independent-carousel {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .independent-slide-container {
+        position: relative;
+        height: 400px;
+      }
+
+      .independent-slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+
+      .independent-slide.active {
+        opacity: 1;
+      }
+
+      .independent-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .independent-slide:hover img {
+        transform: scale(1.05);
+      }
+
+      .independent-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+        font-size: 1.4rem;
+      }
+
+      .independent-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.7);
+        color: #2c5e3c;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        z-index: 10;
+      }
+
+      .independent-button:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .independent-button.prev {
+        left: 15px;
+      }
+
+      .independent-button.next {
+        right: 15px;
+      }
+
+      .independent-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .independent-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .independent-indicator.active {
+        background: white;
+        transform: scale(1.2);
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        header {
+          padding: 3rem 1rem 4rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .sub-nav {
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding: 1rem;
+        }
+
+        .section-block {
+          margin: 2rem 1rem;
+          padding: 1.5rem;
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .triple-independent-carousel {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .independent-carousel {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header style="position: relative; padding: 2rem 1rem 3rem">
+      <!-- 导航链接容器 -->
+      <div
+        style="
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 2rem;
+          display: flex;
+          gap: 2rem;
+        "
+      >
+        <a
+          href="../nandongting/index.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          "
+          >🏠 首页
+        </a>
+      </div>
+      <h1>植物资源</h1>
+      <p>南洞庭湖湿地生态多样性展示</p>
+    </header>
+
+    <!-- 搜索区域 -->
+    <section class="search-section">
+      <div class="container">
+        <h1 class="search-title">植物之美 绿意盎然</h1>
+        <p class="search-subtitle">探索南洞庭湖丰富的植物类资源</p>
+        <div class="search-box">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="搜索各种各样植物的生态景观..."
+          />
+          <button class="search-button">搜索</button>
+        </div>
+        <p class="search-tip">可以尝试搜索关键词，如"芦苇"、"水杉"或"香蒲"</p>
+      </div>
+    </section>
+
+    <nav class="sub-nav">
+      <a href="#classification">分类体系</a>
+      <a href="#gallery">植物图鉴</a>
+    </nav>
+
+    <!-- 轮播展示区 -->
+    <section class="section-block">
+      <h2>特色植物展示</h2>
+      <div class="triple-independent-carousel">
+        <!-- 第一个独立轮播 -->
+        <div class="independent-carousel" id="carouselA">
+          <div class="independent-slide-container">
+            <div class="independent-slide active">
+              <img
+                src="../nandongting/plant-picture/植物类/垂柳.jpg"
+                alt="垂柳"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=垂柳'"
+              />
+              <div class="independent-caption">垂柳</div>
+            </div>
+            <div class="independent-slide">
+              <img
+                src="../nandongting/plant-picture/植物类/茶花.jpg"
+                alt="茶花"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=茶花'"
+              />
+              <div class="independent-caption">茶花</div>
+            </div>
+            <button
+              class="independent-button prev"
+              onclick="changeIndependentSlide(-1, 'carouselA')"
+            >
+              ❮
+            </button>
+            <button
+              class="independent-button next"
+              onclick="changeIndependentSlide(1, 'carouselA')"
+            >
+              ❯
+            </button>
+            <div class="independent-indicators" id="indicatorsA"></div>
+          </div>
+        </div>
+
+        <!-- 第二个独立轮播 -->
+        <div class="independent-carousel" id="carouselB">
+          <div class="independent-slide-container">
+            <div class="independent-slide active">
+              <img
+                src="../nandongting/plant-picture/植物类/雪松.jpg"
+                alt="雪松"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=雪松'"
+              />
+              <div class="independent-caption">雪松</div>
+            </div>
+            <div class="independent-slide">
+              <img
+                src="../nandongting/plant-picture/植物类/凤尾蕨.jpg"
+                alt="凤尾蕨"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=凤尾蕨'"
+              />
+              <div class="independent-caption">凤尾蕨</div>
+            </div>
+            <button
+              class="independent-button prev"
+              onclick="changeIndependentSlide(-1, 'carouselB')"
+            >
+              ❮
+            </button>
+            <button
+              class="independent-button next"
+              onclick="changeIndependentSlide(1, 'carouselB')"
+            >
+              ❯
+            </button>
+            <div class="independent-indicators" id="indicatorsB"></div>
+          </div>
+        </div>
+
+        <!-- 第三个独立轮播 -->
+        <div class="independent-carousel" id="carouselC">
+          <div class="independent-slide-container">
+            <div class="independent-slide active">
+              <img
+                src="../nandongting/plant-picture/植物类/白玉兰.jpg"
+                alt="白玉兰"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=白玉兰'"
+              />
+              <div class="independent-caption">白玉兰</div>
+            </div>
+            <div class="independent-slide">
+              <img
+                src="../nandongting/plant-picture/植物类/海金沙.jpg"
+                alt="海金沙"
+                onerror="this.src='https://via.placeholder.com/400x400/6B9D7A/ffffff?text=海金沙'"
+              />
+              <div class="independent-caption">海金沙</div>
+            </div>
+            <button
+              class="independent-button prev"
+              onclick="changeIndependentSlide(-1, 'carouselC')"
+            >
+              ❮
+            </button>
+            <button
+              class="independent-button next"
+              onclick="changeIndependentSlide(1, 'carouselC')"
+            >
+              ❯
+            </button>
+            <div class="independent-indicators" id="indicatorsC"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <index>
+      <!-- 分类区块 -->
+      <section id="classification" class="section-block">
+        <h2>植物分类系统</h2>
+        <div class="taxonomy-accordion">
+          <div class="taxonomy-item">
+            <div class="taxonomy-header">
+              <span>被子植物门 Angiospermae</span>
+              <span>▶</span>
+            </div>
+            <div class="taxonomy-content">
+              <ul class="species-list">
+                <li>芦苇 Phragmites australis</li>
+                <li>香蒲 Typha orientalis</li>
+                <li>菖蒲 Acorus calamus</li>
+              </ul>
+            </div>
+          </div>
+          <div class="taxonomy-item">
+            <div class="taxonomy-header">
+              <span>裸子植物门 Gymnospermae</span>
+              <span>▶</span>
+            </div>
+            <div class="taxonomy-content">
+              <ul class="species-list">
+                <li>水杉 Metasequoia glyptostroboides</li>
+                <li>落羽杉 Taxodium distichum</li>
+                <li>池杉 Taxodium ascendens</li>
+              </ul>
+            </div>
+          </div>
+          <div class="taxonomy-item">
+            <div class="taxonomy-header">
+              <span>蕨类植物门 Pteridophyta</span>
+              <span>▶</span>
+            </div>
+            <div class="taxonomy-content">
+              <ul class="species-list">
+                <li>水蕨 Ceratopteris thalictroides</li>
+                <li>满江红 Azolla imbricata</li>
+                <li>槐叶萍 Salvinia natans</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 图鉴区块 -->
+      <div class="section-block">
+        <h2>植物图鉴</h2>
+        <div class="filter-group">
+          <select class="filter-select" id="taxonomyFilter">
+            <option value="">所有分类</option>
+            <option value="Angiospermae">被子植物门</option>
+            <option value="Gymnospermae">裸子植物门</option>
+            <option value="Pteridophyta">蕨类植物门</option>
+          </select>
+
+          <select class="filter-select" id="habitatFilter">
+            <option value="">所有栖息地</option>
+            <option value="wetland">湿地</option>
+            <option value="forest">林地</option>
+            <option value="grassland">草地</option>
+          </select>
+
+          <select class="filter-select" id="seasonFilter">
+            <option value="">所有季节</option>
+            <option value="spring">春季</option>
+            <option value="summer">夏季</option>
+            <option value="autumn">秋季</option>
+          </select>
+        </div>
+
+        <div class="gallery-grid">
+          <div
+            class="plant-card"
+            data-order="Angiospermae"
+            data-habitat="wetland"
+            data-season="summer"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/垂柳.jpg"
+              alt="垂柳"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=垂柳'"
+            />
+            <div class="plant-info">
+              <h3>垂柳</h3>
+              <p class="latin">Salix babylonica</p>
+              <p>杨柳科柳属，湿地常见植物，具有重要的生态价值。</p>
+            </div>
+          </div>
+
+          <div
+            class="plant-card"
+            data-order="Gymnospermae"
+            data-habitat="forest"
+            data-season="spring"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/雪松.jpg"
+              alt="雪松"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=雪松'"
+            />
+            <div class="plant-info">
+              <h3>雪松</h3>
+              <p class="latin">Cedrus deodara</p>
+              <p>松科雪松属，常绿乔木，适应湿地环境。</p>
+            </div>
+          </div>
+
+          <div
+            class="plant-card"
+            data-order="Angiospermae"
+            data-habitat="wetland"
+            data-season="summer"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/茶花.jpg"
+              alt="茶花"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=茶花'"
+            />
+            <div class="plant-info">
+              <h3>茶花</h3>
+              <p class="latin">Camellia japonica</p>
+              <p>山茶科山茶属，湿地标志性植物，具有净化水质作用。</p>
+            </div>
+          </div>
+
+          <div
+            class="plant-card"
+            data-order="Pteridophyta"
+            data-habitat="wetland"
+            data-season="spring"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/凤尾蕨.jpg"
+              alt="凤尾蕨"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=凤尾蕨'"
+            />
+            <div class="plant-info">
+              <h3>凤尾蕨</h3>
+              <p class="latin">Pteris cretica</p>
+              <p>凤尾蕨科凤尾蕨属，水生蕨类植物，叶片羽状分裂。</p>
+            </div>
+          </div>
+
+          <div
+            class="plant-card"
+            data-order="Angiospermae"
+            data-habitat="grassland"
+            data-season="autumn"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/白玉兰.jpg"
+              alt="白玉兰"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=白玉兰'"
+            />
+            <div class="plant-info">
+              <h3>白玉兰</h3>
+              <p class="latin">Magnolia denudata</p>
+              <p>木兰科木兰属，药用植物，具有芳香气味。</p>
+            </div>
+          </div>
+
+          <div
+            class="plant-card"
+            data-order="Pteridophyta"
+            data-habitat="wetland"
+            data-season="summer"
+          >
+            <img
+              src="../nandongting/plant-picture/植物类/海金沙.jpg"
+              alt="海金沙"
+              onerror="this.src='https://via.placeholder.com/300x240/6B9D7A/ffffff?text=海金沙'"
+            />
+            <div class="plant-info">
+              <h3>海金沙</h3>
+              <p class="latin">Lygodium japonicum</p>
+              <p>海金沙科海金沙属，小型水生蕨类，可固氮。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </index>
+
+    <script>
+      // 手风琴交互
+      document.querySelectorAll(".taxonomy-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling;
+          content.style.maxHeight = content.style.maxHeight
+            ? null
+            : content.scrollHeight + "px";
+          header.querySelector("span:last-child").textContent = content.style
+            .maxHeight
+            ? "▼"
+            : "▶";
+        });
+      });
+
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: "smooth",
+          });
+        });
+      });
+
+      // 动态导航栏
+      window.addEventListener("scroll", () => {
+        const nav = document.querySelector(".sub-nav");
+        nav.style.background =
+          window.scrollY > 100
+            ? "rgba(255,255,255,0.98)"
+            : "rgba(255,255,255,0.95)";
+      });
+
+      // 搜索功能
+      document
+        .querySelector(".search-button")
+        .addEventListener("click", function () {
+          const query = document.querySelector(".search-input").value.trim();
+          if (query) {
+            alert(`正在搜索: ${query}`);
+            // 实际应用中这里应该是AJAX请求或页面跳转
+          }
+        });
+
+      // 回车搜索
+      document
+        .querySelector(".search-input")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            document.querySelector(".search-button").click();
+          }
+        });
+
+      // 筛选功能
+      document.addEventListener("DOMContentLoaded", () => {
+        const filters = {
+          order: "",
+          habitat: "",
+          season: "",
+        };
+
+        document.querySelectorAll(".filter-select").forEach((select) => {
+          select.addEventListener("change", (e) => {
+            const type = e.target.id.replace("Filter", "");
+            filters[type] = e.target.value;
+            applyFilters();
+          });
+        });
+
+        function applyFilters() {
+          document.querySelectorAll(".plant-card").forEach((card) => {
+            const matchOrder =
+              !filters.order || card.dataset.order === filters.order;
+            const matchHabitat =
+              !filters.habitat || card.dataset.habitat === filters.habitat;
+            const matchSeason =
+              !filters.season || card.dataset.season === filters.season;
+
+            card.style.display =
+              matchOrder && matchHabitat && matchSeason ? "block" : "none";
+          });
+        }
+
+        // 分类标题点击事件 - 只更新筛选器，不自动应用筛选
+        document.querySelectorAll(".taxonomy-header").forEach((header) => {
+          header.addEventListener("click", () => {
+            const orderName = header.textContent.split(" ")[0];
+            // 将中文分类名转换为对应的英文值
+            let filterValue = "";
+            switch (orderName) {
+              case "被子植物门":
+                filterValue = "Angiospermae";
+                break;
+              case "裸子植物门":
+                filterValue = "Gymnospermae";
+                break;
+              case "蕨类植物门":
+                filterValue = "Pteridophyta";
+                break;
+              default:
+                filterValue = "";
+            }
+            // 只更新筛选器的显示值，不自动应用筛选
+            document.getElementById("taxonomyFilter").value = filterValue;
+          });
+        });
+      });
+
+      // 轮播图功能
+      const independentSlides = { carouselA: 0, carouselB: 0, carouselC: 0 };
+
+      // 初始化独立轮播
+      function initIndependentCarousels() {
+        ["carouselA", "carouselB", "carouselC"].forEach((id) => {
+          const slides = document.querySelectorAll(`#${id} .independent-slide`);
+          const indicators = document.getElementById(
+            `indicators${id.slice(-1)}`
+          );
+
+          // 创建指示器
+          slides.forEach((_, index) => {
+            const indicator = document.createElement("div");
+            indicator.className = "independent-indicator";
+            if (index === 0) indicator.classList.add("active");
+            indicator.onclick = () => goToIndependentSlide(index, id);
+            indicators.appendChild(indicator);
+          });
+
+          showIndependentSlide(0, id);
+        });
+      }
+
+      // 显示指定幻灯片
+      function showIndependentSlide(index, carouselId) {
+        const slides = document.querySelectorAll(
+          `#${carouselId} .independent-slide`
+        );
+        const indicators = document.querySelectorAll(
+          `#indicators${carouselId.slice(-1)} .independent-indicator`
+        );
+
+        slides.forEach((slide) => slide.classList.remove("active"));
+        indicators.forEach((ind) => ind.classList.remove("active"));
+
+        independentSlides[carouselId] = index;
+        slides[index].classList.add("active");
+        indicators[index].classList.add("active");
+      }
+
+      // 切换幻灯片
+      function changeIndependentSlide(delta, carouselId) {
+        const slides = document.querySelectorAll(
+          `#${carouselId} .independent-slide`
+        );
+        let newIndex =
+          (independentSlides[carouselId] + delta + slides.length) %
+          slides.length;
+        showIndependentSlide(newIndex, carouselId);
+      }
+
+      // 跳转到指定幻灯片
+      function goToIndependentSlide(index, carouselId) {
+        showIndependentSlide(index, carouselId);
+      }
+
+      // 自动轮播
+      function autoIndependentSlide() {
+        setInterval(() => {
+          Object.keys(independentSlides).forEach((id) => {
+            const slides = document.querySelectorAll(
+              `#${id} .independent-slide`
+            );
+            const newIndex = (independentSlides[id] + 1) % slides.length;
+            showIndependentSlide(newIndex, id);
+          });
+        }, 5000);
+      }
+
+      // 初始化
+      window.addEventListener("DOMContentLoaded", () => {
+        initIndependentCarousels();
+        autoIndependentSlide();
+      });
+    </script>
+  </body>
+</html>

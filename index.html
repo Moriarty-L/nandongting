@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <!-- 基础元信息 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>南洞庭湖生物多样性科普馆</title>
+
+    <!-- 引入现代字体 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* 基础重置 */
+      ▪ {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* 全屏高度设置 */
+      html {
+        height: 100%;
+      }
+
+      /* 主体布局设置 */
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: url("https://i.postimg.cc/MTZ0nYjB/3.png") no-repeat center
+          center fixed;
+        background-size: cover;
+        line-height: 1.6;
+        font-family: "Poppins", "微软雅黑", sans-serif;
+      }
+
+      /* ================= 现代化页眉设计 ================= */
+      header {
+        background: linear-gradient(
+          135deg,
+          rgba(44, 94, 60, 0.92) 0%,
+          rgba(74, 147, 122, 0.92) 100%
+        );
+        color: white;
+        padding: 2rem 1rem;
+        text-align: center;
+        backdrop-filter: blur(5px);
+        margin-bottom: 1.5rem;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.05) 0px,
+          rgba(255, 255, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 8px
+        );
+        pointer-events: none;
+      }
+
+      header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 1.2rem;
+        text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      header p {
+        font-size: 1.2rem;
+        font-weight: 300;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.9;
+        line-height: 1.8;
+      }
+
+      /* 导航栏样式 */
+      nav {
+        background: rgba(255, 255, 255, 0.853);
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        margin-bottom: 2rem;
+      }
+
+      /* 导航链接样式 */
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        color: #2c5e3c;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.8rem 1.2rem;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background: rgba(44, 94, 60, 0.1);
+      }
+
+      /* 搜索框样式 */
+      .search-box {
+        position: relative;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-right: 1rem;
+      }
+
+      #search-input {
+        padding: 0.8rem 1.5rem;
+        border: 1px solid rgba(44, 94, 60, 0.3);
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.9);
+        width: 220px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      #search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(138, 177, 125, 0.3);
+        border-color: #8ab17d;
+      }
+
+      #searchButton {
+        padding: 0.8rem 1.5rem;
+        background: #8ab17d;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      #searchButton:hover {
+        background: #6d8a63;
+        transform: translateY(-1px);
+      }
+
+      /* 用户区域样式 */
+      .user-section {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+      }
+
+      /* 认证按钮样式 */
+      .auth-btn {
+        background: #8ab17d;
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .auth-btn:hover {
+        background: #6d8a63;
+        transform: translateY(-2px);
+      }
+
+      /* 轮播容器样式 */
+      .carousel-container {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      /* 轮播渐变过渡 */
+      .carousel-slide {
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+
+      .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      /* 轮播图标题样式 */
+      .carousel-caption {
+        position: absolute;
+        bottom: 0;
+        background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+        color: white;
+        width: 100%;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      /* 轮播按钮样式 */
+      .carousel-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.5);
+        color: #333;
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 50%;
+        transition: background 0.3s ease;
+      }
+
+      .carousel-button:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .carousel-button.prev {
+        left: 5px;
+      }
+
+      .carousel-button.next {
+        right: 5px;
+      }
+      .carousel-slide.active {
+        opacity: 1;
+        position: relative;
+      }
+
+      /* 新增板块样式 */
+      .news-section {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        color: #2c5e3c;
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid #8ab17d;
+      }
+
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+
+      .news-card {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .news-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .news-date {
+        color: #8ab17d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .news-title {
+        font-size: 1.2rem;
+        color: #2c5e3c;
+        margin-bottom: 1rem;
+      }
+
+      .news-content {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      /* 介绍区域样式 */
+      .intro {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 0 2rem;
+      }
+
+      .intro h2 {
+        font-size: 2rem;
+        color: #2c5e3c;
+        margin-bottom: 1rem;
+      }
+
+      .intro p {
+        font-size: 1.2rem;
+        color: #555;
+      }
+
+      /* 轮播画廊布局 */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+        padding: 0 2rem;
+      }
+
+      /* 模态框样式 */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        width: 400px;
+        max-width: 90%;
+        position: relative;
+      }
+
+      /* 关闭按钮样式 */
+      .close-btn {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* 表单组样式 */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      /* 输入框样式 */
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+      }
+
+      /* 响应式设计 - 移动端适配 */
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .intro h2 {
+          font-size: 1.8rem;
+        }
+
+        .intro p {
+          font-size: 1rem;
+        }
+
+        .search-box {
+          width: 100%;
+          margin: 0.5rem 0;
+        }
+
+        #search-input {
+          width: 100%;
+          flex: 1;
+        }
+
+        .user-section {
+          width: 100%;
+          justify-content: space-between;
+        }
+      }
+
+      /* 页脚样式 */
+      footer {
+        background: rgba(26, 61, 43, 0.95);
+        color: rgba(255, 255, 255, 0.9);
+        padding: 1.2rem 1rem;
+        margin-top: auto;
+        font-size: 0.9rem;
+      }
+
+      .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+        padding: 0.3rem 0;
+      }
+
+      .footer-links a:hover {
+        opacity: 0.8;
+      }
+
+      footer p {
+        text-align: center;
+        opacity: 0.8;
+        margin: 0.8rem 0 0;
+        line-height: 1.4;
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 480px) {
+        footer {
+          padding: 1rem 0.8rem;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          gap: 0.8rem;
+          text-align: center;
+        }
+
+        footer p {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 页眉区域 -->
+    <header>
+      <h1>南洞庭湖生物多样性科普馆</h1>
+      <p>守护湿地生态，共享美好家园</p>
+    </header>
+
+    <!-- 导航区域 -->
+    <nav>
+      <ul class="nav-links">
+        <li>
+          <a href="./birds-code/birds-basic.html">鸟类资源</a>
+        </li>
+        <li><a href="./fish-code/fish-basic.html">鱼类资源</a></li>
+        <li>
+          <a href="./insect-code/insect-basic.html">昆虫资源</a>
+        </li>
+        <li>
+          <a href="./plant-code/plant-basic.html">植物资源</a>
+        </li>
+        <li>
+          <a href="./animal-code/animal-basic.html">动物资源</a>
+        </li>
+        <li><a href="./communication.html">交流互鉴</a></li>
+      </ul>
+      <div class="user-section">
+        <div class="search-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="搜索鸟类或内容..."
+            aria-label="搜索输入框"
+          />
+          <button id="searchButton" type="button">搜索</button>
+        </div>
+        <button class="auth-btn" onclick="showModal('login')">登录</button>
+        <button class="auth-btn" onclick="showModal('register')">注册</button>
+      </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <index>
+      <section class="intro">
+        <h2>探索湿地奥秘 守护生态家园</h2>
+        <p>
+          南洞庭湖国际重要湿地是东亚-澳大利西亚候鸟迁徙路线的重要中转站，每年有超过10万只候鸟在此停歇。加入我们，一起保护这个珍贵的生态系统。
+        </p>
+      </section>
+
+      <!-- 轮播画廊 -->
+      <div class="gallery">
+        <!-- 第一个轮播部分 -->
+        <div class="carousel-container" id="carousel1">
+          <div class="carousel-slide">
+            <img src="./白眉姬鹟.jpg" alt="白眉姬鹟" />
+            <div class="carousel-caption">白眉姬鹟</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="./黄胸鹀.jpg" alt="黄胸鹀" />
+            <div class="carousel-caption">黄胸鹀</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="./红头长尾山雀.jpg" alt="红头长尾山雀" />
+            <div class="carousel-caption">红头长尾山雀</div>
+          </div>
+          <button
+            class="carousel-button prev"
+            onclick="changeSlide(-1, 'carousel1')"
+          >
+            &#10094;
+          </button>
+          <button
+            class="carousel-button next"
+            onclick="changeSlide(1, 'carousel1')"
+          >
+            &#10095;
+          </button>
+        </div>
+
+        <!-- 第二个轮播部分 -->
+        <div class="carousel-container" id="carousel2">
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/wBYKKLdX/1.jpg" alt="科普馆1" />
+            <div class="carousel-caption">科普馆</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/FHtC1vnm/2.jpg" alt="科普馆2" />
+            <div class="carousel-caption">科普馆</div>
+          </div>
+          <button
+            class="carousel-button prev"
+            onclick="changeSlide(-1, 'carousel2')"
+          >
+            &#10094;
+          </button>
+          <button
+            class="carousel-button next"
+            onclick="changeSlide(1, 'carousel2')"
+          >
+            &#10095;
+          </button>
+        </div>
+
+        <!-- 第三个轮播部分 -->
+        <div class="carousel-container" id="carousel3">
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/ncqg4MmM/3.jpg" alt="湿地景观1" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/y8B5vBhj/4.jpg" alt="湿地景观2" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/fRKPPFBN/5.jpg" alt="湿地景观3" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/3wxqQBcD/6.jpg" alt="湿地景观4" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/g0tTzZCt/7.jpg" alt="湿地景观5" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="https://i.postimg.cc/ydwp9zYF/8.jpg" alt="湿地景观6" />
+            <div class="carousel-caption">湿地景观</div>
+          </div>
+          <button
+            class="carousel-button prev"
+            onclick="changeSlide(-1, 'carousel3')"
+          >
+            &#10094;
+          </button>
+          <button
+            class="carousel-button next"
+            onclick="changeSlide(1, 'carousel3')"
+          >
+            &#10095;
+          </button>
+        </div>
+      </div>
+
+      <!-- 新增新闻板块 -->
+      <div class="news-section">
+        <h2 class="section-title">项目组动态</h2>
+        <div class="news-grid">
+          <div class="news-card">
+            <div class="news-date">2024-03-15</div>
+            <h3 class="news-title">湿地生态修复工程启动</h3>
+            <p class="news-content">
+              本月正式启动湖区生态修复二期工程，预计恢复湿地面积200公顷，为候鸟提供更优质栖息环境...
+            </p>
+          </div>
+          <div class="news-card">
+            <div class="news-date">2024-03-12</div>
+            <h3 class="news-title">志愿者招募计划</h3>
+            <p class="news-content">
+              2024年度湿地保护志愿者招募启动，欢迎热爱自然的你加入我们的守护者行列...
+            </p>
+          </div>
+        </div>
+
+        <h2 class="section-title">湿地新闻</h2>
+        <div class="news-grid">
+          <div class="news-card">
+            <div class="news-date">2024-03-18</div>
+            <h3 class="news-title">候鸟迁徙高峰到来</h3>
+            <p class="news-content">
+              监测数据显示，本周过境候鸟数量已突破5万只，创近年同期新高...
+            </p>
+          </div>
+          <div class="news-card">
+            <div class="news-date">2024-03-14</div>
+            <h3 class="news-title">新物种发现记录</h3>
+            <p class="news-content">
+              科研团队在湖区发现罕见鸟类——黑脸琵鹭，刷新本地物种记录...
+            </p>
+          </div>
+        </div>
+      </div>
+    </index>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h3>用户登录</h3>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" required />
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" required />
+          </div>
+          <button type="submit" class="auth-btn">登录</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h3>用户注册</h3>
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" required minlength="4" />
+          </div>
+          <div class="form-group">
+            <label>邮箱</label>
+            <input type="email" required />
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" required minlength="6" />
+          </div>
+          <button type="submit" class="auth-btn">注册</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 页脚区域 -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <ul class="footer-links">
+            <li><a href="./introduction.html">场馆介绍</a></li>
+            <li><a href="./connect.html">联系我们</a></li>
+          </ul>
+        </div>
+        <p>2025 南洞庭湖生物多样性科普馆</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript代码 -->
+    <script>
+      // 轮播图索引存储
+      const slideIndexes = {
+        carousel1: 0,
+        carousel2: 0,
+        carousel3: 0,
+      };
+
+      // 显示指定索引的轮播图
+      function showSlide(index, carouselId) {
+        const slides = document.querySelectorAll(
+          `#${carouselId} .carousel-slide`
+        );
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("active", i === index);
+        });
+      }
+
+      // 切换轮播图
+      function changeSlide(delta, carouselId) {
+        let currentSlideIndex = slideIndexes[carouselId];
+        const slides = document.querySelectorAll(
+          `#${carouselId} .carousel-slide`
+        );
+        currentSlideIndex =
+          (currentSlideIndex + delta + slides.length) % slides.length;
+        slideIndexes[carouselId] = currentSlideIndex;
+        showSlide(currentSlideIndex, carouselId);
+      }
+
+      // 自动轮播
+      function autoSlide() {
+        setInterval(() => {
+          Object.keys(slideIndexes).forEach((carouselId) => {
+            const slides = document.querySelectorAll(
+              `#${carouselId} .carousel-slide`
+            );
+            slideIndexes[carouselId] =
+              (slideIndexes[carouselId] + 1) % slides.length;
+            showSlide(slideIndexes[carouselId], carouselId);
+          });
+        }, 5000);
+      }
+
+      // 页面加载初始化
+      window.onload = function () {
+        showSlide(0, "carousel1");
+        showSlide(0, "carousel2");
+        showSlide(0, "carousel3");
+        autoSlide();
+      };
+
+      // 模态框功能
+      function showModal(type) {
+        document.getElementById(type + "Modal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.querySelectorAll(".modal").forEach((modal) => {
+          modal.style.display = "none";
+        });
+      }
+
+      window.onclick = function (event) {
+        if (event.target.className === "modal") {
+          closeModal();
+        }
+      };
+
+      function handleLogin(e) {
+        e.preventDefault();
+        alert("登录成功！");
+        closeModal();
+      }
+
+      function handleRegister(e) {
+        e.preventDefault();
+        alert("注册成功！");
+        closeModal();
+      }
+    </script>
+  </body>
+</html>

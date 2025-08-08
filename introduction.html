@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>场馆介绍 - 南洞庭湖生物多样性科普馆</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* 复用主站样式 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      /* 限定背景范围 */
+      header {
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+        background: linear-gradient(15deg, #2d6650 0%, #68a179 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative; /* 保持背景层定位 */
+      }
+
+      /* 确保伪元素不影响居中 */
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(43, 102, 80, 1) 0%,
+          rgba(43, 102, 80, 0) 100%
+        );
+        z-index: -1;
+      }
+
+      header h1 {
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        letter-spacing: 1px;
+      }
+      body {
+        font-family: "Poppins", "微软雅黑", sans-serif;
+      }
+
+      /* 场馆特色样式 */
+      .museum-hero {
+        background: linear-gradient(
+            rgba(44, 94, 60, 0.9),
+            rgba(44, 94, 60, 0.7)
+          ),
+          url("images/museum-bg.jpg") center/cover;
+        color: white;
+        padding: 6rem 2rem;
+        text-align: left;
+      }
+
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 3rem auto;
+        padding: 0 1rem;
+      }
+
+      .timeline-item {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+        border-left: 4px solid #8ab17d;
+      }
+
+      .facility-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .facility-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .facility-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+      }
+      .section-block {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <header style="position: relative; padding: 2rem 1rem 3rem">
+      <!-- 导航链接容器 -->
+      <div
+        style="
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 2rem;
+          display: flex;
+          gap: 2rem;
+        "
+      >
+        <a
+          href="index.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          "
+          >🏠 首页
+        </a>
+        <a
+          href="connect.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          "
+        >
+          📮 联系我们
+        </a>
+      </div>
+
+      <!-- 标题部分 -->
+      <h1 style="text-align: center; color: white; margin-bottom: 0.5rem">
+        南洞庭湖生物多样性科普馆
+      </h1>
+      <p style="text-align: center; font-size: 1.2rem; opacity: 0.9">
+        中国首个湿地生态主题科普馆
+      </p>
+    </header>
+
+    <index>
+      <section class="section-block">
+        <h2>中国首个湿地生态主题科普馆</h2>
+        <p>
+          南洞庭湖生物多样性科普馆以南洞庭湿地公园为背景，宗旨为：守护湿地生态，携手共创美好家园，
+          致力于向公众普及该地区丰富的鸟类资源及相关生态知识，提升公众对鸟类及湿地生态的保护意识。
+          其中设置了包含鸟类资源、观鸟指南、鸟类保护、知识科普、互动交流等多个栏目
+        </p>
+      </section>
+
+      <section class="section-block">
+        <h2 style="color: #2c5e3c">发展历程</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>2010年 - 立项筹建</h3>
+            <p>经国家林业局批准，启动湿地生态保护科普基地建设项目</p>
+          </div>
+          <div class="timeline-item">
+            <h3>2015年 - 一期开放</h3>
+            <p>完成主体建筑建设，开放生态展示厅和观鸟平台</p>
+          </div>
+          <div class="timeline-item">
+            <h3>2020年 - 全面升级</h3>
+            <p>引入AR导览系统，建成国内首个湿地生态数字孪生系统</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <h2 style="color: #2c5e3c">核心设施</h2>
+        <div class="facility-grid">
+          <div class="facility-card">
+            <img src="images/facility/1.jpg" alt="数字展厅" />
+            <div class="card-content">
+              <h3>数字生态展厅</h3>
+              <p>300㎡全息投影空间，实时展示湿地生态系统</p>
+            </div>
+          </div>
+          <div class="facility-card">
+            <img src="images/facility/2.jpg" alt="观鸟平台" />
+            <div class="card-content">
+              <h3>360°观鸟平台</h3>
+              <p>配备20台专业观鸟设备，覆盖主要候鸟栖息区</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </index>
+  </body>
+</html>
